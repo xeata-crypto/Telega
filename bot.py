@@ -16,9 +16,7 @@ def handle(msg):
         text = msg.text.replace(f'@{bot.get_me().username}', '').strip()
     else:
         text = msg.text
-    
-    response = client.models.generate_content(
-        model='gemini-2.0-flash',
-        contents=text
-    )
-    bot.reply_to(msg, respo
+    response = client.models.generate_content(model='gemini-2.0-flash', contents=text)
+    bot.reply_to(msg, response.text)
+
+bot.polling()
