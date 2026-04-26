@@ -1,12 +1,11 @@
 import os
 import telebot
-import google.generativeai as genai
+from google import genai
 
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 GEMINI_KEY = os.environ.get('GEMINI_KEY')
 
-genai.configure(api_key=GEMINI_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
+client = genai.Client(api_key=GEMINI_KEY)
 bot = telebot.TeleBot(BOT_TOKEN)
 
 @bot.message_handler(func=lambda msg: True)
@@ -18,7 +17,8 @@ def handle(msg):
     else:
         text = msg.text
     
-    reply = model.generate_content(text).text
-    bot.reply_to(msg, reply)
-
-bot.polling()
+    response = client.models.generate_content(
+        model='gemini-2.0-flash',
+        contents=text
+    )
+    bot.reply_to(msg, respo
